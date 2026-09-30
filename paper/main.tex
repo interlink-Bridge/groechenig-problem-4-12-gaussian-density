@@ -1,0 +1,847 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{array}
+
+\hypersetup{
+  pdftitle={On Groechenig's Problem 4.12: Failure and Central-Dominance Repair of Beurling-Density Variation Diminution for Gaussian Shifts},
+  pdfauthor={Alexanja Senke},
+  pdfsubject={Preprint v2.0 - public release}
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}_{q}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\supp}{\operatorname{supp}}
+
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Groechenig Problem 4.12 - Gaussian failure and repair}
+\rhead{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\title{\bfseries On Gr\"ochenig's Problem 4.12:\\[0.25em]
+Failure and Central-Dominance Repair of\\
+Beurling-Density Variation Diminution for Gaussian Shifts}
+\author{Alexanja Senke\\\small Independent research note}
+\date{Version 2.0 - 30 September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\fbox{\parbox{0.92\textwidth}{\small
+\textbf{Release and verification status.}
+This is an independent preprint prepared for public release from a previously restricted research record.
+The lower-density construction has undergone referee-style internal reconstruction; the upper-density construction and the central-dominance theorem have undergone separate internal clean-room reconstruction. No claim of peer review, independent external proof certification, worldwide novelty, or publication priority is made. The purpose of this version is to present one canonical, human-readable mathematical object with explicit claim boundaries and verification targets.}}
+\end{center}
+
+\begin{abstract}
+Let
+\[
+  \phi(x)=\e^{-\pi x^2},\qquad
+  f(x)=\sum_{k\in\Z}c_k\phi(x-k),\qquad c\in\ell^\infty(\Z),
+\]
+with real coefficients. Problem 4.12 in Gr\"ochenig asks whether the lower and upper Beurling densities of the real zero set of $f$ are bounded by the corresponding densities of coefficient sign changes. For the Gaussian generator, this note develops three complementary results. First, a gliding-hump construction gives
+\[
+  D^-(c)=0,\qquad D^-(Z(f))\ge \tfrac12.
+\]
+Second, for every $Q\in\N$ there exists an absolutely summable, nowhere-zero coefficient sequence with the fixed periodic sign pattern
+\[
+  \sgn(c_k)=(-1)^{\lfloor k/Q\rfloor}
+\]
+and
+\[
+  D^-(c)=D^+(c)=\frac1Q,\qquad D^+(Z(f))=\infty.
+\]
+Thus equality of lower and upper sign-change densities does not restore the same-direction upper-density inequality. Third, an amplitude-sensitive Central Gaussian Dominance condition restores exact zero/sign correspondence: under suitable ordered control points, each coefficient sign change produces exactly one simple real zero and no other real zeros occur. In the lattice-point case, an explicit domination functional yields exact equality of both lower and upper densities. Cross-direction density inequalities are outside the scope of this release.
+\end{abstract}
+
+\section{Setting, main statements, and reader's map}
+
+For a real sequence $c=(c_k)_{k\in\Z}$, following \cite{Grochenig2026}, define its sign-change set by
+\[
+ M(c)=\{j\in\Z:\ \exists r>0\text{ with }c_jc_{j+r}<0\text{ and }c_{j+\ell}=0\text{ for }1\le \ell<r\}.
+\]
+The coefficient densities are
+\[
+ D^-(c)=\liminf_{n\to\infty}\min_{a\in\Z}
+ \frac{\#(M(c)\cap[a,a+n])}{n},
+\]
+\[
+ D^+(c)=\limsup_{n\to\infty}\max_{a\in\Z}
+ \frac{\#(M(c)\cap[a,a+n])}{n}.
+\]
+For a locally finite set $\Lambda\subset\R$ we use
+\[
+ D^-(\Lambda)=\liminf_{L\to\infty}\inf_{x\in\R}
+ \frac{\#(\Lambda\cap[x,x+L])}{L},\qquad
+ D^+(\Lambda)=\limsup_{L\to\infty}\sup_{x\in\R}
+ \frac{\#(\Lambda\cap[x,x+L])}{L}.
+\]
+The Gaussian is a P\'olya-frequency generator and therefore lies within the hypotheses of Problem~4.12 \cite{Grochenig2026}.
+
+\begin{lemma}[Entire extension]\label{lem:entire}
+If $c\in\ell^\infty(\Z)$, then
+\[
+ F(z)=\sum_{k\in\Z}c_k\e^{-\pi(z-k)^2}
+\]
+converges absolutely and uniformly on compact subsets of $\C$ and defines an entire function.
+\end{lemma}
+
+\begin{proof}
+On a compact set with $|\operatorname{Re}z|\le R$ and $|\operatorname{Im}z|\le S$,
+\[
+ \left|\e^{-\pi(z-k)^2}\right|
+ =\e^{\pi(\operatorname{Im}z)^2}\e^{-\pi(\operatorname{Re}z-k)^2}.
+\]
+For $|k|>2R$ the right-hand side is at most $\e^{\pi S^2}\e^{-\pi k^2/4}$, and the latter sequence is summable. The Weierstrass $M$-test gives compact-uniform convergence.
+\end{proof}
+
+\begin{theorem}[Lower-density failure]\label{thm:lower}
+There exists a bounded real sequence $c$ such that the associated nonzero Gaussian shift series satisfies
+\[
+ \boxed{D^-(c)=0,\qquad D^-(Z(f))\ge \frac12.}
+\]
+Consequently the same-direction lower-density inequality proposed in Problem~4.12 fails already for the Gaussian.
+\end{theorem}
+
+\begin{theorem}[Uniform-sign upper-density failure]\label{thm:upper}
+For every $Q\in\N$ there exists a real sequence $c=(c_k)\in\ell^1(\Z)$ with $c_k\neq0$ for every $k$ and
+\[
+ \sgn(c_k)=(-1)^{\lfloor k/Q\rfloor}
+\]
+such that
+\[
+ \boxed{D^-(c)=D^+(c)=\frac1Q,\qquad D^+(Z(f))=\infty.}
+\]
+In particular, equality of lower and upper sign-change densities does not repair the same-direction upper-density inequality.
+\end{theorem}
+
+\begin{theorem}[Central Gaussian dominance]\label{thm:dominance}
+Assume $c_k\neq0$ for all $k$. Suppose there exists a strictly increasing sequence $(x_k)_{k\in\Z}$ with $x_k\to\pm\infty$ such that
+\begin{equation}\label{eq:dominance}
+ |c_k|\e^{-\pi(x_k-k)^2}
+ >\sum_{j\neq k}|c_j|\e^{-\pi(x_k-j)^2}\qquad(k\in\Z).
+\end{equation}
+Then, for every $k$,
+\[
+ c_kc_{k+1}<0
+ \quad\Longleftrightarrow\quad
+ Z(f)\cap(x_k,x_{k+1})\text{ consists of exactly one simple zero},
+\]
+whereas $c_kc_{k+1}>0$ implies $Z(f)\cap(x_k,x_{k+1})=\varnothing$. These are all real zeros of $f$.
+\end{theorem}
+
+\subsection*{Reader's map: three pieces of geometry}
+The proof architecture is easier to read if the mechanisms are separated before the estimates.
+\begin{enumerate}[leftmargin=2.1em]
+  \item \textbf{Macroscopic redistribution.} A finite block uses $m+1$ consecutive coefficient sites but transports $m$ zeros across a region of length about $2m$. Gluing larger and larger blocks creates arbitrarily long sign-change deserts while preserving a uniform zero supply.
+  \item \textbf{Amplitude compression.} A different finite block keeps a fixed periodic coefficient sign pattern but compresses many zeros into increasingly short relative windows. Recursive separation preserves those zero clusters without changing the sign set.
+  \item \textbf{Amplitude-sensitive repair.} Central dominance introduces information that a sign-density alone forgets: each coefficient receives an ordered point where its Gaussian contribution dominates the sum of all competitors. A finite Descartes count then survives the bilateral analytic limit.
+\end{enumerate}
+
+The first point also explains the otherwise non-obvious use of the odd zero lattice. The $q$-binomial algebra is not the reason for selecting $1,3,\ldots,2m-1$; the choice creates a geometric mismatch between coefficient-support length and zero-transport length. If the same route placed the zeros only across a region comparable to the coefficient support, the macroscopic sign-change desert used below would disappear. The odd lattice is therefore a spatial allocation device in this construction, not an algebraic necessity.
+
+\section{The lower-density gliding hump}
+
+\subsection{Finite Gaussian transport blocks}
+Put
+\[
+ q=\e^{-4\pi}.
+\]
+For $m\in\N$ define
+\begin{equation}\label{eq:block-product}
+ B_m(x)=\e^{-\pi x^2}\prod_{s=1}^{m}
+ \left(1-\e^{2\pi(x-(2s-1))}\right).
+\end{equation}
+The roots are the simple points $1,3,\ldots,2m-1$.
+
+\begin{lemma}[Integer-shift representation]\label{lem:qbinom-lower}
+For $0\le j\le m$ let
+\[
+ \beta_{m,j}=(-1)^j\e^{-\pi j^2}\qbinom{m}{j},
+\]
+where
+\[
+ \qbinom{m}{j}=
+ \frac{(q;q)_m}{(q;q)_j(q;q)_{m-j}},\qquad
+ (q;q)_r=\prod_{\ell=1}^{r}(1-q^\ell).
+\]
+Then
+\begin{equation}\label{eq:block-sum}
+ B_m(x)=\sum_{j=0}^{m}\beta_{m,j}\e^{-\pi(x-j)^2}.
+\end{equation}
+Moreover $\sgn\beta_{m,j}=(-1)^j$, and there is a constant $C_q<\infty$, independent of $m,j$, such that
+\[
+ |\beta_{m,j}|\le C_q\e^{-\pi j^2}.
+\]
+\end{lemma}
+
+\begin{proof}
+The finite $q$-binomial identity gives
+\[
+ \prod_{r=0}^{m-1}(1-aq^r)
+ =\sum_{j=0}^{m}(-1)^jq^{j(j-1)/2}\qbinom{m}{j}a^j.
+\]
+Take $a=\e^{2\pi(x-1)}$. Then
+\[
+ q^{j(j-1)/2}a^j=\e^{2\pi jx-2\pi j^2}.
+\]
+Since
+\[
+ \e^{-\pi(x-j)^2}=\e^{-\pi x^2}\e^{2\pi jx-\pi j^2},
+\]
+we obtain \eqref{eq:block-sum}. Positivity of the Gaussian binomial coefficient gives the sign pattern. Finally,
+\[
+ \qbinom{m}{j}
+ =\frac{(q;q)_m}{(q;q)_j(q;q)_{m-j}}
+ \le (q;q)_\infty^{-2},
+\]
+which yields the uniform envelope.
+\end{proof}
+
+Thus $m+1$ consecutive coefficient locations $0,1,\ldots,m$ generate $m$ prescribed simple zeros across a region of length about $2m$.
+
+\subsection{Endpoint margins and one-sided tails}
+Fix $\delta=1/4$. For the root $2j-1$ consider
+\[
+ I_{m,j}=[2j-1-\delta,\,2j-1+\delta].
+\]
+Define
+\[
+ C_\delta=\prod_{d=1}^{\infty}
+ \left(1-\e^{-2\pi(2d-\delta)}\right)>0
+\]
+and
+\begin{equation}\label{eq:K}
+ K=(1-\e^{-2\pi\delta})C_\delta^2\e^{-\pi(1+\delta^2)}>0.
+\end{equation}
+
+\begin{lemma}[Uniform bracket margin]\label{lem:margin}
+For every $m\ge j\ge1$ and $\tau\in\{-\delta,+\delta\}$,
+\begin{equation}\label{eq:margin}
+ |B_m(2j-1+\tau)|
+ \ge K\e^{-2\pi j^2+2\pi(1-\delta)j}.
+\end{equation}
+The two endpoint signs are opposite.
+\end{lemma}
+
+\begin{proof}
+For $s<j$, writing $d=j-s$,
+\[
+ |1-\e^{2\pi(2d+\tau)}|
+ =\e^{2\pi(2d+\tau)}(1-\e^{-2\pi(2d+\tau)}),
+\]
+whereas for $s>j$,
+\[
+ |1-\e^{2\pi(\tau-2d)}|
+ =1-\e^{-2\pi(2d-\tau)}.
+\]
+The two correction products are bounded below by $C_\delta$, and the root factor by $1-\e^{-2\pi\delta}$. The exact exponential exponent, divided by $\pi$, is
+\[
+ -2j^2-2j\tau+2j-\tau^2-1.
+\]
+Its smaller value on $\tau=\pm\delta$ is attained at $\tau=+\delta$, giving \eqref{eq:margin}. Since the root inside the bracket is simple and there is no other block root in the bracket, the endpoint signs are opposite.
+\end{proof}
+
+\begin{lemma}[One-sided Gaussian tails]\label{lem:tails}
+For $x\ge2m+1-\delta$,
+\begin{equation}\label{eq:righttail}
+ |B_m(x)|\le \e^{-\pi[m^2+(x-m)^2]}.
+\end{equation}
+For $x\le0$,
+\begin{equation}\label{eq:lefttail}
+ |B_m(x)|\le \e^{-\pi x^2}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+If $x\ge2m+1-\delta$, all exponents in \eqref{eq:block-product} are positive and $|1-\e^u|\le\e^u$. Since $\sum_{s=1}^{m}(2s-1)=m^2$,
+\[
+ |B_m(x)|\le
+ \e^{-\pi x^2+2\pi mx-2\pi m^2}
+ =\e^{-\pi[m^2+(x-m)^2]}.
+\]
+If $x\le0$, every product factor in \eqref{eq:block-product} has modulus below $1$, which yields \eqref{eq:lefttail}.
+\end{proof}
+
+For later coarse estimates we use
+\begin{equation}\label{eq:Kcoarse}
+ K>\frac1{150}.
+\end{equation}
+Indeed $C_\delta>0.99$, $1-\e^{-\pi/2}>3/4$, and $\e^{-17\pi/16}>\e^{-4}>1/100$ already imply \eqref{eq:Kcoarse}.
+
+\subsection{Positive half-line construction}
+Set
+\[
+ A=32,\qquad m_n=A2^{n-1},\qquad R_n=2(m_n-A),\qquad n\ge1.
+\]
+Then
+\[
+ R_1=0,\qquad R_{n+1}=R_n+2m_n,
+\]
+so the physical cells $[R_n,R_n+2m_n]$ concatenate without gaps. Let
+\begin{equation}\label{eq:alpha}
+ \alpha_n=
+ \exp\!\left[-\frac{2\pi}{3}(m_n^2-A^2)\right],
+\end{equation}
+so that
+\begin{equation}\label{eq:alpha-ratio}
+ \frac{\alpha_{n+1}}{\alpha_n}=\e^{-2\pi m_n^2}.
+\end{equation}
+Define
+\begin{equation}\label{eq:positive-c}
+ c_{R_n+j}=\alpha_n\beta_{m_n,j},\qquad 0\le j\le m_n,
+\end{equation}
+and set all remaining positive coefficients equal to zero. Because every $m_n$ is even, the first and last nonzero signs in every positive block are both positive. The positive part is
+\[
+ F_+(x)=\sum_{n=1}^{\infty}\alpha_nB_{m_n}(x-R_n).
+\]
+For each $n$ and $1\le j\le m_n$, the current block has a root at
+\[
+ \rho_{n,j}=R_n+2j-1.
+\]
+As $n$ varies, these centers are precisely all positive odd integers.
+
+\begin{lemma}[Earlier-block interference]\label{lem:earlier}
+At either endpoint $x=\rho_{n,j}\pm\delta$, the sum of all earlier positive blocks is less than one eighth of the current block endpoint magnitude.
+\end{lemma}
+
+\begin{proof}
+Put $M=m_n$ and let $a=m_i\le M/2$ be an earlier block length. The shift between block starts is
+\[
+ R_n-R_i=2(M-a).
+\]
+Using \eqref{eq:righttail}, \eqref{eq:margin}, and the amplitude ratio from \eqref{eq:alpha}, the logarithm of the past/current ratio, after removing $K^{-1}$ and dividing by $\pi$, is bounded above by
+\[
+ \Phi(M,a,j)=\frac23(M^2-a^2)-a^2-
+ \left(2M-3a+2j-\frac54\right)^2
+ +2j^2-\frac32j.
+\]
+Direct differentiation gives
+\[
+ \frac{\partial\Phi}{\partial a}
+ =\frac{72M-128a+72j-45}{6}>0
+\]
+on $a\le M/2$, and after putting $a=M/2$,
+\[
+ \frac{\partial}{\partial j}\Phi(M,M/2,j)
+ =-\frac{4M+8j-7}{2}<0.
+\]
+Hence the worst case is $a=M/2$, $j=1$, where
+\[
+ \Phi(M,M/2,1)=-\frac{3M}{4}-\frac1{16}.
+\]
+Therefore
+\[
+ \frac{|\text{one earlier block}|}{|\text{current endpoint}|}
+ \le K^{-1}\e^{-\pi(3M/4+1/16)}.
+\]
+There are $n-1$ earlier blocks and $n-1\le M/32$. Combining this with $K^{-1}<150$ and $\pi>3$ gives
+\[
+ \frac{|\text{all earlier blocks}|}{|\text{current endpoint}|}
+ \le \frac{150M}{32}\e^{-3(3M/4+1/16)}<\frac18
+\]
+for $M\ge64$; for $n=1$ there is no earlier block.
+\end{proof}
+
+\begin{lemma}[Later-block interference]\label{lem:later}
+At either endpoint $x=\rho_{n,j}\pm\delta$, the sum of all later positive blocks is less than one eighth of the current block endpoint magnitude.
+\end{lemma}
+
+\begin{proof}
+Every later block is evaluated at a local coordinate at most $-1+\delta=-3/4$, so by \eqref{eq:lefttail} its unscaled magnitude is at most $1$. From \eqref{eq:alpha-ratio},
+\[
+ \sum_{i>n}\alpha_i
+ \le\frac{\alpha_n\e^{-2\pi M^2}}{1-\e^{-2\pi M^2}}.
+\]
+The weakest endpoint margin in the current block occurs at $j=M$, hence Lemma~\ref{lem:margin} gives
+\[
+ |\text{current endpoint}|\ge
+ \alpha_nK\e^{-2\pi M^2+2\pi(1-\delta)M}.
+\]
+Thus
+\[
+ \frac{|\text{all later blocks}|}{|\text{current endpoint}|}
+ \le
+ \frac{\e^{-2\pi(1-\delta)M}}{K(1-\e^{-2\pi M^2})}<\frac18
+\]
+for $M\ge32$.
+\end{proof}
+
+\subsection{Negative completion and survival of the positive roots}
+Define the negative coefficients by
+\begin{equation}\label{eq:negative-c}
+ c_{-2r}=(-1)^r,\qquad c_{-(2r-1)}=0,\qquad r\ge1.
+\end{equation}
+The coefficient $c_0=1$ is already supplied by the first positive block. Let
+\[
+ H_-(x)=\sum_{r=1}^{\infty}(-1)^r\e^{-\pi(x+2r)^2}.
+\]
+The full function is
+\begin{equation}\label{eq:full-f}
+ f(x)=H_-(x)+\sum_{n=1}^{\infty}\alpha_nB_{m_n}(x-R_n).
+\end{equation}
+By Lemma~\ref{lem:entire}, \eqref{eq:full-f} defines an entire function.
+
+\begin{lemma}[Negative-tail interference on positive brackets]\label{lem:negative-tail}
+At every endpoint $x=\rho_{n,j}\pm\delta$, the negative-half contribution has magnitude less than one eighth of the current block endpoint magnitude.
+\end{lemma}
+
+\begin{proof}
+Since every positive endpoint satisfies $x\ge3/4$,
+\[
+ |H_-(x)|\le\frac{\e^{-\pi(x+2)^2}}{1-\e^{-15\pi}}.
+\]
+For the block $M=m_n$ and root index $j$, divide this by the lower bound in Lemma~\ref{lem:margin} including the factor $\alpha_n$. For the more dangerous endpoint $\tau=-\delta$, the exponent divided by $\pi$ is
+\[
+ \Theta_A(M,j)=-(x+2)^2+\frac23(M^2-A^2)+2j^2-\frac32j,
+\]
+with $x=2(M-A)+2j-1-\delta$. For the first block $M=A$ this simplifies to
+\[
+ \Theta_A(A,j)=-32j^2+72j+\frac9{16},
+\]
+whose maximum is $-113/16$ at $j=1$. For every later block $M\ge2A$, both partial derivatives of $\Theta_A$ in $M$ and $j$ are negative, and the value at $M=2A,j=1$ is smaller than the first-block value. Therefore
+\[
+ \Theta_A(M,j)\le-\frac{113}{16}
+\]
+for all blocks and roots. Consequently
+\[
+ \frac{|H_-(x)|}{|\text{current endpoint}|}
+ \le\frac{\e^{-113\pi/16}}{K(1-\e^{-15\pi})}<\frac18.
+\]
+\end{proof}
+
+\begin{proposition}[Protected positive zeros]\label{prop:positivezeros}
+For every positive odd integer $2\ell-1$ there exists a zero $z_\ell$ of $f$ satisfying
+\[
+ |z_\ell-(2\ell-1)|\le\frac14.
+\]
+\end{proposition}
+
+\begin{proof}
+At the two endpoints of every prescribed bracket, the current block contributes opposite signs by Lemma~\ref{lem:margin}. Lemmas~\ref{lem:earlier}, \ref{lem:later}, and \ref{lem:negative-tail} show that the total perturbation has magnitude below $3/8$ of the current endpoint magnitude. Hence the full function has the same sign as the current block at both endpoints. The intermediate value theorem gives a zero inside every bracket. The endpoint values are nonzero, so $f\not\equiv0$.
+\end{proof}
+
+\subsection{Zeros on the negative axis}
+Consider the bilateral theta-type function
+\[
+ H(x)=\sum_{k\in\Z}(-1)^k\e^{-\pi(x-2k)^2}.
+\]
+A shift of the summation index gives
+\begin{equation}\label{eq:antiperiodic}
+ H(x+2)=-H(x).
+\end{equation}
+Also
+\[
+ H(0)=1+2\sum_{k=1}^{\infty}(-1)^k\e^{-4\pi k^2}>0.
+\]
+The coefficient sequence of $f$ agrees with that of $H$ at all negative even indices and at $0$. Hence $f-H$ is a Gaussian series with centers in the nonnegative integers and uniformly bounded coefficients.
+
+\begin{lemma}[Quantitative left-tail comparison]\label{lem:leftcomparison}
+There is a constant $C_0<\infty$ such that, for every $x\le-1$,
+\[
+ |f(x)-H(x)|
+ \le C_0\sum_{\ell=0}^{\infty}\e^{-\pi(x-\ell)^2}
+ \le\frac{C_0\e^{-\pi x^2}}{1-\e^{-2\pi}}.
+\]
+In particular, $f(x)-H(x)\to0$ as $x\to-\infty$.
+\end{lemma}
+
+\begin{proof}
+Write
+\[
+ f(x)-H(x)=\sum_{\ell=0}^{\infty}d_\ell\e^{-\pi(x-\ell)^2},
+\]
+with $|d_\ell|\le C_0$. If $x\le-1$ and $t=-x\ge1$, then
+\[
+ (x-\ell)^2=(t+\ell)^2\ge t^2+2t\ell,
+\]
+and therefore
+\[
+ \sum_{\ell=0}^{\infty}\e^{-\pi(x-\ell)^2}
+ \le\e^{-\pi t^2}\sum_{\ell=0}^{\infty}\e^{-2\pi t\ell}
+ =\frac{\e^{-\pi x^2}}{1-\e^{-2\pi t}}
+ \le\frac{\e^{-\pi x^2}}{1-\e^{-2\pi}}.
+\]
+\end{proof}
+
+By Lemma~\ref{lem:leftcomparison} and \eqref{eq:antiperiodic}, for all sufficiently negative integers $N$,
+\[
+ \sgn f(2N)=(-1)^N.
+\]
+Therefore every interval $(2N,2N+2)$ sufficiently far to the left contains at least one zero of $f$.
+
+\subsection{Density computation}
+Within the $n$th positive block, all adjacent nonzero coefficients alternate. Its final coefficient is positive because $m_n$ is even, and the first coefficient of the next block is also positive. Thus the zero run between the blocks does not create a sign change under the definition of $M(c)$. More precisely, there is no point of $M(c)$ at any integer
+\[
+ R_n+m_n,\ R_n+m_n+1,\ldots,R_{n+1}-1,
+\]
+a run containing exactly $m_n$ integers. Since $m_n\to\infty$,
+\begin{equation}\label{eq:Dc-lower}
+ \boxed{D^-(c)=0.}
+\end{equation}
+The alternating negative tail does not alter this conclusion because the lower density takes the minimum over translates.
+
+On the positive half-line, Proposition~\ref{prop:positivezeros} provides one zero within distance $1/4$ of each positive odd integer. On the negative half-line, one zero occurs in every sufficiently negative interval of length $2$. A bounded transition region near the origin costs only a constant. Consequently there exists $C<\infty$ such that every interval $I\subset\R$ satisfies
+\[
+ \#(Z(f)\cap I)\ge\frac{|I|}{2}-C.
+\]
+Therefore
+\begin{equation}\label{eq:Dz-lower}
+ \boxed{D^-(Z(f))\ge\frac12,}
+\end{equation}
+which proves Theorem~\ref{thm:lower}.
+
+The construction remains compatible with the established bound $D^-(Z(f))\le1$ for nonzero functions in the relevant Gaussian-type shift-invariant spaces; see \cite{GRS2018,GRS2020}. It also does not contradict finite variation diminution: each finite block has the expected finite number of sign changes and prescribed zeros. The failure appears only after nonstationary gluing.
+
+\section{An upper-density counterexample with a fixed periodic sign set}
+The upper-density failure is different. One needs only arbitrarily dense zero clusters on arbitrarily long intervals, not a uniform zero supply on every long interval.
+
+\subsection{A finitely supported compression block}
+Fix $Q\in\N$, $m\in\N$, and $0<\theta<1$. Define
+\begin{equation}\label{eq:compression-block}
+ B_{m,\theta,Q}(x)=\e^{-\pi x^2}
+ \prod_{s=1}^{m}\left(1-\e^{2\pi Q(x-\theta Qs)}\right).
+\end{equation}
+Its roots are exactly
+\[
+ \theta Q,\ 2\theta Q,\ldots,m\theta Q,
+\]
+and are simple. Let
+\[
+ r=\e^{-2\pi\theta Q^2}.
+\]
+The finite $q$-binomial identity yields
+\begin{equation}\label{eq:compression-expansion}
+ B_{m,\theta,Q}(x)=\sum_{j=0}^{m}
+ \beta^{(\theta,Q)}_{m,j}\e^{-\pi(x-Qj)^2},
+\end{equation}
+where
+\begin{equation}\label{eq:compression-beta}
+ \beta^{(\theta,Q)}_{m,j}
+ =(-1)^j\e^{\pi Q^2j^2}r^{j(j+1)/2}
+ \genfrac{[}{]}{0pt}{}{m}{j}_{r}.
+\end{equation}
+Consequently $\sgn\beta^{(\theta,Q)}_{m,j}=(-1)^j$. Let
+\[
+ A_{m,\theta,Q}=\max_{0\le j\le m}
+ \left|\beta^{(\theta,Q)}_{m,j}\right|
+\]
+and normalize
+\[
+ G_{m,\theta,Q}=A_{m,\theta,Q}^{-1}B_{m,\theta,Q}.
+\]
+All Gaussian coefficients of $G_{m,\theta,Q}$ have modulus at most $1$ and preserve the alternating signs, while the prescribed roots are unchanged.
+
+For each finite block choose pairwise disjoint closed brackets around its simple roots, contained in $(0,m\theta Q+1)$, on whose two endpoints the block has opposite signs. Let $\eta(m,\theta,Q)>0$ be the minimum absolute endpoint value over those finitely many brackets.
+
+\subsection{Recursive gluing}
+Let
+\[
+ \sigma_k=(-1)^{\lfloor k/Q\rfloor},\qquad
+ b_k=\sigma_k\e^{-|k|^4}.
+\]
+Then $b\in\ell^1(\Z)$, $b_k\neq0$, and the sign changes of $b$ occur exactly once per $Q$ consecutive lattice sites. Choose
+\[
+ \theta_n=\frac1{n+1},\qquad m_n=2n^3.
+\]
+Write $G_n=G_{m_n,\theta_n,Q}$ and $\eta_n=\eta(m_n,\theta_n,Q)$, and set
+\[
+ \lambda_n=\frac{2^{-n}}{m_n+1}.
+\]
+Then $\sum_{n\ge1}\lambda_n(m_n+1)<\infty$. We inductively choose shifts
+\[
+ R_n\in2Q\Z
+\]
+with disjoint supports $R_n+Q\{0,1,\ldots,m_n\}$ and with two separation properties.
+
+First, on every bracket of the new translated block $\lambda_nG_n(\cdot-R_n)$,
+\begin{equation}\label{eq:new-block-separation}
+ |F_b+\lambda_1G_1(\cdot-R_1)+\cdots+\lambda_{n-1}G_{n-1}(\cdot-R_{n-1})|
+ <\frac{\lambda_n\eta_n}{4},
+\end{equation}
+where
+\[
+ F_b(x)=\sum_{k\in\Z}b_k\e^{-\pi(x-k)^2}.
+\]
+This is possible because $F_b(x)\to0$ as $x\to+\infty$ and every earlier block is a finite Gaussian sum whose right tail tends to zero.
+
+Second, for every earlier bracket family $i<n$,
+\begin{equation}\label{eq:old-block-protection}
+ \sup_{x\in K_i}|\lambda_nG_n(x-R_n)|
+ <2^{-n-i-4}\lambda_i\eta_i,
+\end{equation}
+where $K_i$ is the finite union of the protected brackets of block $i$. This is possible by moving $R_n$ sufficiently far to the right.
+
+Define the final coefficients by adding the translated coefficients of $\lambda_nG_n$ to $b$. The block supports are disjoint, every normalized block coefficient has modulus at most $1$, and
+\[
+ \sum_{n\ge1}\lambda_n(m_n+1)=\sum_{n\ge1}2^{-n}<\infty.
+\]
+Consequently
+\[
+ c\in\ell^1(\Z)\subset\ell^\infty(\Z).
+\]
+Moreover, at a block location $R_n+Qj$,
+\[
+ \sigma_{R_n+Qj}=(-1)^{R_n/Q+j}=(-1)^j,
+\]
+because $R_n/Q$ is even. Thus the block coefficient and background coefficient have the same sign, so
+\begin{equation}\label{eq:periodic-sign-pattern}
+ \sgn(c_k)=\sigma_k\qquad\text{for every }k\in\Z.
+\end{equation}
+
+The sum of all future contributions on a protected bracket of block $i$ is bounded, by \eqref{eq:old-block-protection}, by
+\[
+ \lambda_i\eta_i\sum_{n>i}2^{-n-i-4}<\frac{\lambda_i\eta_i}{4}.
+\]
+Together with \eqref{eq:new-block-separation}, the total perturbation of the current block is strictly smaller than half the endpoint margin $\lambda_i\eta_i$. The endpoint signs therefore survive, and the intermediate value theorem supplies at least one zero in every protected bracket.
+
+Block $n$ consequently supplies at least $m_n$ distinct zeros in an interval of length
+\[
+ \theta_nQm_n+O(1).
+\]
+Since this length tends to infinity and
+\[
+ \frac{m_n}{\theta_nQm_n+O(1)}\longrightarrow
+ \frac1{\theta_nQ}=\frac{n+1}{Q},
+\]
+we obtain
+\[
+ \boxed{D^+(Z(f))=\infty.}
+\]
+On the coefficient side, \eqref{eq:periodic-sign-pattern} gives
+\[
+ M(c)=\{k\in\Z:\ k\equiv Q-1\pmod Q\},
+\]
+and therefore
+\[
+ \boxed{D^-(c)=D^+(c)=\frac1Q.}
+\]
+This proves Theorem~\ref{thm:upper}.
+
+\begin{remark}[Strength of the upper counterexample]
+The $\ell^1$ conclusion is not needed for Problem~4.12, whose coefficient class is $\ell^\infty$. It shows that the failure is not caused by lack of coefficient summability. A global scalar rescaling can make the $\ell^1$ or $\ell^\infty$ norm arbitrarily small without changing the zero set or the sign pattern.
+\end{remark}
+
+\begin{corollary}[No sign-set-only upper control]\label{cor:signset-only}
+No proposed universal upper-zero-density bound depending only on the set $M(c)$ can hold for all bounded Gaussian coefficient sequences unless it is allowed to take the value $+\infty$ already on a periodic sign-change set.
+\end{corollary}
+
+\begin{proof}
+For fixed $Q$, Theorem~\ref{thm:upper} keeps the periodic sign-change set fixed while making the upper zero density infinite.
+\end{proof}
+
+\section{Central Gaussian dominance and exact zero/sign correspondence}
+The upper-density failure uses extremely uneven coefficient magnitudes inside the compressed blocks. This suggests that the missing information is not another density of the sign set, but amplitude-sensitive control of how far a coefficient can transport its variation.
+
+Set
+\[
+ a_k=c_k\e^{-\pi k^2}
+\]
+and introduce the bilateral Laurent series
+\begin{equation}\label{eq:laurent}
+ H(y)=\sum_{k\in\Z}a_ky^k,\qquad y\in\C\setminus\{0\}.
+\end{equation}
+Because $c$ is bounded and $\e^{-\pi k^2}$ is Gaussian, \eqref{eq:laurent} converges compact-uniformly on $\C^\times$. For real $x$,
+\begin{equation}\label{eq:f-H}
+ f(x)=\e^{-\pi x^2}H(\e^{2\pi x}).
+\end{equation}
+Thus real zeros of $f$ correspond exactly to positive zeros of $H$.
+
+For $N\ge1$ write
+\[
+ H_N(y)=\sum_{k=-N}^{N}a_ky^k,\qquad
+ P_N(y)=y^NH_N(y).
+\]
+Then $P_N$ is a real polynomial of degree $2N$ with all coefficients nonzero.
+
+\begin{lemma}[Finite dominance count]\label{lem:finite-dominance}
+Assume \eqref{eq:dominance}. For every $N$ and every $-N\le k\le N$, put $y_k=\e^{2\pi x_k}$. Then the $k$th term dominates all other terms of $H_N$ at $y_k$:
+\[
+ |a_k|y_k^k>
+ \sum_{\substack{-N\le j\le N\\j\neq k}}|a_j|y_k^j.
+\]
+Consequently $P_N$ has exactly one simple positive root in $(y_k,y_{k+1})$ when $c_kc_{k+1}<0$, no positive root there when $c_kc_{k+1}>0$, and all its remaining roots are simple and negative.
+\end{lemma}
+
+\begin{proof}
+Multiplying \eqref{eq:dominance} by $\e^{\pi x_k^2}$ gives the displayed domination inequality because
+\[
+ |c_j|\e^{-\pi(x_k-j)^2}\e^{\pi x_k^2}
+ =|a_j|\e^{2\pi x_kj}=|a_j|y_k^j.
+\]
+Hence $\sgn P_N(y_k)=\sgn c_k$. Each sign change of $(c_k)_{-N}^{N}$ forces at least one positive root between consecutive control points. By Descartes' rule, the total number of positive roots, counted with multiplicity, is at most the number of those sign changes. Hence there is exactly one simple positive root in each sign-change interval and no other positive root on $(0,\infty)$.
+
+For negative roots consider $P_N(-y)$. Its coefficient signs, ordered by $k$, are
+\[
+ (-1)^{k+N}\sgn(c_k).
+\]
+Two successive signs in this modified sequence differ exactly when $c_kc_{k+1}>0$. The magnitude domination is unchanged for $P_N(-y)$, and its sign at $y_k$ is $(-1)^{k+N}\sgn(c_k)$. Thus every sign preservation of $c$ forces a positive root of $P_N(-y)$ in $(y_k,y_{k+1})$, equivalently a negative root of $P_N$ in $(-y_{k+1},-y_k)$. The number of sign changes plus sign preservations is $2N$, the degree of $P_N$. Therefore all $2N$ roots are already accounted for, are distinct, and are real.
+\end{proof}
+
+The finite argument is closely related to the dominating-index criterion for sign-independent real-rootedness studied by Forsg\aa rd, Novikov, and Shapiro \cite{Forsgard2017}. Here only the elementary domination plus Descartes-counting mechanism is used before passing to a bilateral analytic limit.
+
+\begin{proof}[Proof of Theorem~\ref{thm:dominance}]
+Fix $k$. For all sufficiently large $N$, Lemma~\ref{lem:finite-dominance} applies to the interval $(y_k,y_{k+1})$. Since $H_N\to H$ compact-uniformly on $\C^\times$, the full dominance inequality also gives $H(y_k)H(y_{k+1})<0$ exactly when $c_kc_{k+1}<0$, so at least one zero of $H$ lies in that interval.
+
+To exclude additional or multiple zeros, choose one or more pairwise disjoint closed disks contained in the relevant positive interval, with boundaries free of zeros of $H$, and enclosing the zeros of $H$ there with multiplicities. Compact-uniform convergence gives $|H_N-H|<|H|$ on those boundaries for all large $N$, so Rouch\'e's theorem forces $H_N$ to have the same total number of zeros, counted with multiplicity, in the disks. Lemma~\ref{lem:finite-dominance} gives at most one simple positive zero in a sign-change interval and none in a same-sign interval. Hence $H$ has exactly one simple zero in the former and none in the latter. Finally, $H(y_k)\neq0$ by strict dominance, and the intervals $(y_k,y_{k+1})$ exhaust $(0,\infty)$ because $x_k\to\pm\infty$. Equation \eqref{eq:f-H} completes the proof.
+\end{proof}
+
+\subsection{A lattice-point dominance criterion}
+The simplest choice is $x_k=k$. Define
+\begin{equation}\label{eq:gamma-pi}
+ \Gamma_\pi(c)=\sup_{k\in\Z}
+ \sum_{j\neq k}\left|\frac{c_j}{c_k}\right|\e^{-\pi(j-k)^2}.
+\end{equation}
+
+\begin{corollary}[Gaussian local dominance]\label{cor:local-dominance}
+If $c_k\neq0$ for all $k$ and $\Gamma_\pi(c)<1$, then
+\[
+ Z(f)\cap(k,k+1)=
+ \begin{cases}
+ \{\text{one simple zero}\}, & c_kc_{k+1}<0,\\
+ \varnothing, & c_kc_{k+1}>0.
+ \end{cases}
+\]
+In particular the zero set is in bounded one-to-one correspondence with $M(c)$ and
+\[
+ D^-(Z(f))=D^-(c),\qquad D^+(Z(f))=D^+(c).
+\]
+\end{corollary}
+
+\begin{corollary}[Uniform amplitude window]\label{cor:amplitude-window}
+Suppose
+\[
+ 0<m\le|c_k|\le M<\infty\qquad(k\in\Z).
+\]
+If
+\begin{equation}\label{eq:amplitude-threshold}
+ \frac{M}{m}<
+ \left(2\sum_{d=1}^{\infty}\e^{-\pi d^2}\right)^{-1}
+ =11.5694126702278\ldots,
+\end{equation}
+then the exact density identities of Corollary~\ref{cor:local-dominance} hold.
+\end{corollary}
+
+\begin{proof}
+For every $k$,
+\[
+ \sum_{j\neq k}\left|\frac{c_j}{c_k}\right|\e^{-\pi(j-k)^2}
+ \le\frac{M}{m}\,2\sum_{d=1}^{\infty}\e^{-\pi d^2}.
+\]
+\end{proof}
+
+\begin{corollary}[Log-amplitude Lipschitz condition]\label{cor:log-lipschitz}
+Assume $c_k\neq0$ and
+\[
+ |\log|c_{k+1}|-\log|c_k||\le L\qquad(k\in\Z).
+\]
+If
+\[
+ 2\sum_{d=1}^{\infty}\e^{-\pi d^2+Ld}<1,
+\]
+then Corollary~\ref{cor:local-dominance} applies. The equality threshold is
+\[
+ L_*=2.447513055088462\ldots.
+\]
+In particular $L\le2$ is sufficient, with
+\[
+ 2\sum_{d=1}^{\infty}\e^{-\pi d^2+2d}
+ =0.6390009379\ldots<1.
+\]
+\end{corollary}
+
+\begin{proof}
+The hypothesis implies $|c_{k+d}/c_k|\le\e^{L|d|}$, so \eqref{eq:gamma-pi} is bounded by the displayed series.
+\end{proof}
+
+\section{What fails, what is repaired, and what this release does not address}
+The constructions separate three different pieces of information.
+\begin{enumerate}[leftmargin=2.1em]
+  \item \textbf{Lower Beurling density forgets macroscopic redistribution.} Theorem~\ref{thm:lower} concentrates sign changes into active halves of increasingly large cells and leaves equally large sign-change deserts, while the corresponding zeros remain distributed over the full cells.
+  \item \textbf{Upper Beurling density of the sign set forgets amplitude compression.} Theorem~\ref{thm:upper} does this even with $c\in\ell^1(\Z)$: it keeps a periodic sign-change set with exact density $1/Q$, yet finite blocks of increasingly extreme relative amplitude ratios create arbitrarily dense zero clusters. Thus the failure is not cured by assuming $D^-(c)=D^+(c)$.
+  \item \textbf{Central dominance retains amplitude transport information.} Condition \eqref{eq:dominance} supplies ordered control points at which each coefficient has its own protected Gaussian dominance region. The finite Descartes count then survives the bilateral limit exactly.
+\end{enumerate}
+This identifies amplitude geometry as an essential state variable for a same-direction upper-zero-density control. Cross-direction comparisons, including expressions of the form $D^-(Z(f))\le D^+(c)$, are not addressed in this release and no claim about their status is made here.
+
+\section{Claim boundary and independent verification targets}
+The claims made in this preprint are limited to:
+\begin{itemize}[leftmargin=2em]
+  \item the lower-density Gaussian counterexample of Theorem~\ref{thm:lower};
+  \item the $\ell^1$, fixed-periodic-sign upper-density Gaussian counterexample of Theorem~\ref{thm:upper};
+  \item the Central Gaussian Dominance zero/sign correspondence of Theorem~\ref{thm:dominance};
+  \item the quantitative sufficient conditions in Corollaries~\ref{cor:amplitude-window} and \ref{cor:log-lipschitz}.
+\end{itemize}
+No claim is made that the central-dominance hypotheses are necessary or sharp. No statement is made for arbitrary P\'olya-frequency generators beyond the fact that the Gaussian itself is one. No cross-direction density theorem is claimed. No claim of peer review, independent external proof certification, worldwide novelty, or priority over unidentified prior art is made.
+
+For independent reconstruction, the most useful hostile checks are:
+\begin{enumerate}[leftmargin=2em]
+  \item verify the lower-block finite $q$-binomial identity and the endpoint exponent in Lemma~\ref{lem:margin};
+  \item verify the earlier-, later-, and negative-tail interference bounds preserving all positive lower-density brackets;
+  \item verify the negative theta completion and the final $D^-(Z(f))\ge1/2$ counting estimate;
+  \item verify the compression-block expansion \eqref{eq:compression-expansion}--\eqref{eq:compression-beta};
+  \item verify that the recursive separation conditions \eqref{eq:new-block-separation}--\eqref{eq:old-block-protection} can be met simultaneously, preserve all compressed zeros, and yield an $\ell^1$ sequence;
+  \item verify the exact periodic sign pattern \eqref{eq:periodic-sign-pattern} and the $D^+(Z(f))=\infty$ window calculation;
+  \item reconstruct Lemma~\ref{lem:finite-dominance} using Descartes' rule on $P_N(y)$ and $P_N(-y)$;
+  \item verify the Rouch\'e/Hurwitz passage from the finite real-rooted polynomials to the bilateral Laurent series;
+  \item independently check the numerical constants in \eqref{eq:amplitude-threshold} and Corollary~\ref{cor:log-lipschitz}.
+\end{enumerate}
+
+\section*{Provenance note}
+This v2.0 public release consolidates the mathematical content of the restricted Zenodo v1.0 research state (version DOI \href{https://doi.org/10.5281/zenodo.22661662}{10.5281/zenodo.22661662}) into one canonical manuscript. The restricted record remains the dated archival provenance object. This version intentionally omits private correspondence, chat transcripts, internal handovers, superseded drafts, and separate exploratory branches. The concept DOI for all Zenodo versions is \href{https://doi.org/10.5281/zenodo.22661661}{10.5281/zenodo.22661661}.
+
+\begin{thebibliography}{9}
+\bibitem{Grochenig2026}
+K. Gr\"ochenig,
+\emph{Infinite totally positive matrices: some open problems},
+Acta Scientiarum Mathematicarum (Szeged), 2026.
+\href{https://doi.org/10.1007/s44146-026-00264-3}{doi:10.1007/s44146-026-00264-3}.
+
+\bibitem{GRS2018}
+K. Gr\"ochenig, J. L. Romero, and J. St\"ockler,
+\emph{Sampling theorems for shift-invariant spaces, Gabor frames, and totally positive functions},
+Inventiones Mathematicae \textbf{211} (2018), 1119--1148.
+\href{https://doi.org/10.1007/s00222-017-0760-2}{doi:10.1007/s00222-017-0760-2}.
+
+\bibitem{GRS2020}
+K. Gr\"ochenig, J. L. Romero, and J. St\"ockler,
+\emph{Sharp Results on Sampling with Derivatives in Shift-Invariant Spaces and Multi-Window Gabor Frames},
+Constructive Approximation \textbf{51} (2020), 1--25.
+\href{https://doi.org/10.1007/s00365-019-09456-3}{doi:10.1007/s00365-019-09456-3}.
+
+\bibitem{Forsgard2017}
+J. Forsg\aa rd, D. Novikov, and B. Shapiro,
+\emph{A Tropical Analog of Descartes' Rule of Signs},
+International Mathematics Research Notices 2017, no. 12, 3726--3750.
+\href{https://doi.org/10.1093/imrn/rnw118}{doi:10.1093/imrn/rnw118}.
+\end{thebibliography}
+
+\vfill
+\begin{center}
+\small\textit{Preprint v2.0. Copyright \textcopyright\ 2026 Alexanja Senke. All rights reserved.}
+\end{center}
+
+\end{document}
